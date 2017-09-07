@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+
+echo "${MYID:-1}" > /var/zookeeper/data/myid
+
+# based on https://github.com/apache/zookeeper/blob/trunk/conf/zoo_sample.cfg
+cat > /opt/zookeeper/conf/zoo.cfg <<EOF
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/var/zookeeper/data
+dataLogDir=/var/zookeeper/log
+clientPort=2181
+EOF
+
+# server.1=...
+if [ -n "$SERVERS" ]; then
+    printf '%s' "$SERVERS" | awk 'BEGIN { RS = "," }; { printf "server.%i=%s:2888:3888\n", NR, $0 }' >> /opt/zookeeper/conf/zoo.cfg
+fi
+
+service ssh start
+
+exec "$@"
+
+
