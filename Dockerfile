@@ -20,8 +20,8 @@ VOLUME /tmp/zookeeper
 
 COPY entrypoint.sh /
 COPY log4j.properties  /opt/zookeeper/conf
-chmod a+x  /opt/zookeeper/conf/log4j.properties
-chmod a+x  /entrypoint.sh
+RUN chmod a+x  /opt/zookeeper/conf/log4j.properties
+RUN chmod a+x  /entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/dumb-init", "/entrypoint.sh"]
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/zookeeper/bin
